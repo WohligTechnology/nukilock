@@ -2,26 +2,26 @@ var sails = require("sails");
 var cron = require("node-cron");
 var bluetoothDevices = []
 sails.on("lifted", function () {
-    cron.schedule('*/15 * * * * *', function () {
-        Nukilock.getNukiLockState({}, function (err, data) {
-            if (err || _.isEmpty(data)) {
-                console.log("Error in finding status", err);
-                return 0;
-            }
-            if (data.stateName == "locked") {
-                async.waterfall([
-                    function (callback) { // Get Screenshot
-                        Nukilock.saveShot(callback);
-                    },
-                    function (data, callback) { // Get Screenshot
-                        Nukilock.processImage(callback);
-                    }
-                ], function (err, data) {
-                    console.log(err, data);
-                });
-            }
-        });
-    });
+    //cron.schedule('*/15 * * * * *', function () {
+        //Nukilock.getNukiLockState({}, function (err, data) {
+            //if (err || _.isEmpty(data)) {
+                //console.log("Error in finding status", err);
+                //return 0;
+            //}
+            //if (data.stateName == "locked") {
+                //async.waterfall([
+                    //function (callback) { // Get Screenshot
+                        //Nukilock.saveShot(callback);
+                    //},
+                    //function (data, callback) { // Get Screenshot
+                        //Nukilock.processImage(callback);
+                    //}
+                //], function (err, data) {
+                    //console.log(err, data);
+                //});
+            //}
+        //});
+    //});
     cron.schedule('*/30 * * * * *', function () {
         Config.findOne({
             name: "mainServerUrl"
@@ -34,11 +34,12 @@ sails.on("lifted", function () {
                     url: data.content + "/api/Bluetooth/getMacAddresses",
                 };
                 request(options, function (err, httpResponse, addresses) {
-                    if (err || _.isEmpty(addresses)) {
+					      addresses = JSON.parse(addresses);
+                    if (err || _.isEmpty(addresses) || !addresses.value) {
                         console.log("Unable to find addresses");
                     } else {
-                        addresses = JSON.parse(addresses);
-                        bluetoothDevices = addresses.content;
+						console.log(addresses.data);
+                        bluetoothDevices = addresses.data;
                     }
                 });
             }
@@ -55,7 +56,7 @@ sails.on("lifted", function () {
 
         console.log("Found new Device " + address + " " + props.Name + " " + props.RSSI + " ");
         if (_.indexOf(bluetoothDevices, address) >= 0) {
-            Nukilock.getNukiLockState({}, function (err, data) {
+            Nukilock.getNukiLockState({}, async (err, data) => {
                 if (err || _.isEmpty(data)) {
                     console.log("Error in finding status", err);
                     return 0;
