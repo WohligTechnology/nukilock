@@ -1,4 +1,3 @@
-
 module.exports = _.cloneDeep(require("sails-wohlig-controller"));
 const path = require('path');
 var url = Config.nukiBridgeUrl;
@@ -60,7 +59,7 @@ var controller = {
         req.body.url = req.Url;
         res.unlockNukilock(req.body, res.callback);
     },
-    processImage: function(req, res){
+    processImage: function (req, res) {
         Nukilock.processImage(res.callback);
     },
     setNukilockBridgeUrl: function (req, res) {
@@ -75,6 +74,24 @@ var controller = {
             upsert: true,
             new: true
         }).exec(res.callback);
+    },
+
+    checkPromise: function (req, res) {
+        try {
+            // Nukilock.tryPromise().then(function () {
+            //     res.callback(null, "done");
+            // }).catch(e =>{
+            //     console.log(e.message);
+            //     res.callback(null, e);    
+            // });
+           var j = JSON.parse("");
+
+           res.callback(null, j);
+        } catch(e) {
+            console.log("error");
+            res.callback(null, e);
+        }
+        console.log("after");
     }
 };
 module.exports = _.assign(module.exports, controller);

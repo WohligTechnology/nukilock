@@ -69,7 +69,11 @@ var model = {
                     if (err || _.isEmpty(lockInfo)) {
                         callback(err);
                     } else {
-                        lockInfo = JSON.parse(lockInfo);
+                        try {
+                            lockInfo = JSON.parse(lockInfo);
+                        } catch (e) {
+                            return callback(err, lockInfo);
+                        }
                         console.log(typeof lockInfo);
                         console.log(lockInfo);
                         callback(err, lockInfo);
@@ -106,7 +110,12 @@ var model = {
                         callback(err);
                     } else {
                         console.log(lockInfo);
-                        lockInfo = JSON.parse(lockInfo);
+                        try {
+                            lockInfo = JSON.parse(lockInfo);
+
+                        } catch (e) {
+                            return callback(err, lockInfo);
+                        }
                         console.log(typeof lockInfo);
                         console.log(lockInfo);
                         callback(err, lockInfo);
@@ -143,7 +152,11 @@ var model = {
                     if (err || _.isEmpty(lockInfo)) {
                         callback(err);
                     } else {
-                        lockInfo = JSON.parse(lockInfo);
+                        try {
+                            lockInfo = JSON.parse(lockInfo);
+                        } catch (e) {
+                            return callback(err, lockInfo);
+                        }
                         console.log(typeof lockInfo);
                         console.log(lockInfo);
                         callback(err, lockInfo);
@@ -162,6 +175,24 @@ var model = {
         });
         cam.capture("./webcam.jpg", callback);
     },
+    tryPromise: function (req, res) {
+        var somevar = false;
+        return new Promise(function (resolve, reject) {
+            if (somevar === true)
+                resolve();
+            else {
+                //    /     throw "oh no"
+
+                var err = new Error('I was constructed via the "new" keyword!', "err");
+                err.name = "err!!";
+
+                throw err;
+                reject("oh no");
+                console.log("after");
+            }
+            //reject();
+        });
+    },
     processImage: function (callback) {
 
         var formData = {
@@ -174,7 +205,12 @@ var model = {
             formData: formData
         }, function (err, httpResponse, body) {
             console.log(typeof JSON.parse(body));
-            body = JSON.parse(body);
+            try {
+                body = JSON.parse(body);
+            } catch (e) {
+                return callback(err, body);
+            }
+            //body = JSON.parse(body);
             if (err || !body.value) {
                 callback(err, body);
                 return 0;
