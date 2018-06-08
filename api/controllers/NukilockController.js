@@ -49,15 +49,15 @@ var controller = {
     },
     getNukiLockState: function (req, res) {
         req.body.url = req.Url;
-        res.getNukiLockState(req.body, res.callback);
+        Nukilock.getNukiLockState(req.body, res.callback);
     },
     lockNukilock: function (req, res) {
         req.body.url = req.Url;
-        res.lockNukilock(req.body, res.callback);
+        Nukilock.lockNukilock(req.body, res.callback);
     },
     unlockNukilock: function (req, res) {
         req.body.url = req.Url;
-        res.unlockNukilock(req.body, res.callback);
+        Nukilock.unlockNukilock(req.body, res.callback);
     },
     processImage: function (req, res) {
         Nukilock.processImage(res.callback);
