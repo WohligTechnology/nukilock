@@ -75,7 +75,31 @@ var controller = {
             new: true
         }).exec(res.callback);
     },
+    setMainServerUrl: function (data, callback) {
+        Config.findOneAndUpdate({
+            name: "mainServerUrl"
+        }, {
+            $set: {
+                content: data.mainServerUrl
+            }
+        }, {
+            upsert: true,
+            new: true
+        }).exec(res.callback);
 
+    },
+    setDetectName: function(){
+        Config.findOneAndUpdate({
+            name: "detectName"
+        }, {
+            $set: {
+                content: data.detectName
+            }
+        }, {
+            upsert: true,
+            new: true
+        }).exec(res.callback);
+    },
     checkPromise: function (req, res) {
         try {
             // Nukilock.tryPromise().then(function () {

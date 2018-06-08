@@ -27,7 +27,7 @@ sails.on("lifted", function () {
             name: "mainServerUrl"
         }).exec((err, data) => {
             if (err || _.isEmpty(data)) {
-                callback(err);
+                console.log(err);
             } else {
                 var options = {
                     method: 'post',
