@@ -75,12 +75,12 @@ var controller = {
             new: true
         }).exec(res.callback);
     },
-    setMainServerUrl: function (data, callback) {
+    setMainServerUrl: function (req, res) {
         Config.findOneAndUpdate({
             name: "mainServerUrl"
         }, {
             $set: {
-                content: data.mainServerUrl
+                content: req.body.mainServerUrl
             }
         }, {
             upsert: true,
