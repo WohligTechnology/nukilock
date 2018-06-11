@@ -68,7 +68,7 @@ sails.on("lifted", function () {
                         console.log(props.Name + ' is in range');
                         Nukilock.unlockNukilock({}, function (err) {
                             if (err) {
-                                callback(err);
+                                console.log(err);     
                             } else {
                                 console.log("Unlocked door");
                             }

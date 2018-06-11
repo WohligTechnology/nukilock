@@ -200,38 +200,42 @@ var model = {
             file: fs.createReadStream(path.resolve('./webcam.jpg')),
 
         }
-        request.post({
-            url: Config.mainServerUrl + '/api/Face/processImage',
-            formData: formData
-        }, function (err, httpResponse, body) {
-            console.log(typeof JSON.parse(body));
-            try {
-                body = JSON.parse(body);
-            } catch (e) {
-                return callback(err, body);
-            }
-            //body = JSON.parse(body);
-            if (err || !body.value) {
-                callback(err, body);
-                return 0;
-            }
-            var openLock = false;
-            console.log(body.data);
-            _.each(body.data, function (f) {
-                _.each(f, function (d) {
-                    if (d.distance < 0.6) {
-                        console.log("inside");
-                        openLock = true;
-                    }
+        Config.findOne({
+            name: "mainServerUrl"
+        }).exec((err, data) => {
+            request.post({
+                url: data.content + '/api/Face/processImage',
+                formData: formData
+            }, function (err, httpResponse, body) {
+                console.log(typeof JSON.parse(body));
+                try {
+                    body = JSON.parse(body);
+                } catch (e) {
+                    return callback(err, body);
+                }
+                //body = JSON.parse(body);
+                if (err || !body.value) {
+                    callback(err, body);
+                    return 0;
+                }
+                var openLock = false;
+                console.log(body.data);
+                _.each(body.data, function (f) {
+                    _.each(f, function (d) {
+                        if (d.distance < 0.6) {
+                            console.log(`${d.className} detected with distance ${d.distance}`);
+                            openLock = true;
+                        }
+                    });
                 });
+
+                if (openLock) {
+                    Nukilock.unlockNukilock({}, callback);
+                } else {
+                    callback(err, body);
+                }
+
             });
-
-            if (openLock) {
-                Nukilock.unlockNukilock({}, callback);
-            } else {
-                callback(err, body);
-            }
-
         });
     }
 };
