@@ -49,7 +49,9 @@ var controller = {
     },
     getNukilockState: function (req, res) {
         req.body.url = req.Url;
-        Nukilock.getNukiLockState(req.body, res.callback);
+        Nukilock.getNukiLockState(req.body, function (err, result) {
+            res.callback(err, JSON.stringify(result));
+        });
     },
     lockNukilock: function (req, res) {
         req.body.url = req.Url;
@@ -88,7 +90,7 @@ var controller = {
         }).exec(res.callback);
 
     },
-    setDetectName: function(){
+    setDetectName: function () {
         Config.findOneAndUpdate({
             name: "detectName"
         }, {
@@ -108,10 +110,10 @@ var controller = {
             //     console.log(e.message);
             //     res.callback(null, e);    
             // });
-           var j = JSON.parse("");
+            var j = JSON.parse("");
 
-           res.callback(null, j);
-        } catch(e) {
+            res.callback(null, j);
+        } catch (e) {
             console.log("error");
             res.callback(null, e);
         }
