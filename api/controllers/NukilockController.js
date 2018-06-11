@@ -49,9 +49,7 @@ var controller = {
     },
     getNukilockState: function (req, res) {
         req.body.url = req.Url;
-        Nukilock.getNukiLockState(req.body, function (err, result) {
-            res.callback(err, JSON.stringify(result));
-        });
+        Nukilock.getNukiLockState(req.body, res.callback);
     },
     lockNukilock: function (req, res) {
         req.body.url = req.Url;
