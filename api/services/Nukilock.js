@@ -237,6 +237,10 @@ var model = {
 
             });
         });
-    }
+    },
+    getDevices: function(req, res){
+		 bluetooth.init().then(async ()=>{
+		 });
+	}
 };
 module.exports = _.assign(module.exports, exports, model);

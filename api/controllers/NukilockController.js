@@ -116,6 +116,14 @@ var controller = {
             res.callback(null, e);
         }
         console.log("after");
-    }
+    },
+    getDevices: async (req, res) => {
+		    //detectedDevices = [];
+		     
+		     setTimeout(function(){
+					  res.callback(null, _.uniqBy(detectedDevices, "address") );
+				} ,1000);  
+		 
+	}
 };
 module.exports = _.assign(module.exports, controller);
