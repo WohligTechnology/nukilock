@@ -3,7 +3,7 @@ var cron = require("node-cron");
 var bluetoothDevices = []
 sails.on("lifted", function () {
     cron.schedule('*/5 * * * * *', function () {
-		//console.log("taking snap...");
+		console.log("taking snap...");
 		//async.waterfall([
                     //function (callback) { // Get Screenshot
                         //Nukilock.saveShot(callback);
@@ -60,7 +60,7 @@ sails.on("lifted", function () {
                 }
 					}
                 ], function (err, data) {
-					console.timeEnd("open door");  
+					//console.timeEnd("open door");  
                    // console.log("taking snap result", err, data);
                 });	
            //}
