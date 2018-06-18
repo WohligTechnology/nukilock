@@ -1,6 +1,7 @@
 const path = require('path');
 var unlockAction = 1;
 var lockAction = 2;
+var nodecam = require('node-webcam');
 var schema = new Schema({
     name: {
         type: String,
@@ -74,8 +75,8 @@ var model = {
                         } catch (e) {
                             return callback(err, lockInfo);
                         }
-                        console.log(typeof lockInfo);
-                        console.log(lockInfo);
+                       // console.log(typeof lockInfo);
+                       // console.log(lockInfo);
                         callback(err, lockInfo);
                     }
                 });
@@ -116,8 +117,8 @@ var model = {
                         } catch (e) {
                             return callback(err, lockInfo);
                         }
-                        console.log(typeof lockInfo);
-                        console.log(lockInfo);
+                       // console.log(typeof lockInfo);
+                       // console.log(lockInfo);
                         callback(err, lockInfo);
                     }
                 });
@@ -157,8 +158,8 @@ var model = {
                         } catch (e) {
                             return callback(err, lockInfo);
                         }
-                        console.log(typeof lockInfo);
-                        console.log(lockInfo);
+                      //  console.log(typeof lockInfo);
+                       // console.log(lockInfo);
                         callback(err, lockInfo);
                     }
                 });
@@ -166,6 +167,7 @@ var model = {
         });
     },
     saveShot: function (callback) {
+		console.log("snapShot taken");
         var cam = nodecam.create({
             callbackReturn: "location",
             output: "jpeg",
@@ -174,6 +176,7 @@ var model = {
             quality: 60,
         });
         cam.capture("./webcam.jpg", callback);
+        
     },
     tryPromise: function (req, res) {
         var somevar = false;
@@ -194,12 +197,13 @@ var model = {
         });
     },
     processImage: function (callback) {
-
+        console.log("sending request");
         var formData = {
             name: Config.detectName,
             file: fs.createReadStream(path.resolve('./webcam.jpg')),
 
         }
+        console.time("sending image");
         Config.findOne({
             name: "mainServerUrl"
         }).exec((err, data) => {
@@ -207,7 +211,8 @@ var model = {
                 url: data.content + '/api/Face/processImage',
                 formData: formData
             }, function (err, httpResponse, body) {
-                console.log(typeof JSON.parse(body));
+				console.timeEnd("sending image");
+                //console.log(typeof JSON.parse(body));
                 try {
                     body = JSON.parse(body);
                 } catch (e) {
@@ -218,22 +223,26 @@ var model = {
                     callback(err, body);
                     return 0;
                 }
-                var openLock = false;
-                console.log(body.data);
-                _.each(body.data, function (f) {
-                    _.each(f, function (d) {
-                        if (d.distance < 0.6) {
-                            console.log(`${d.className} detected with distance ${d.distance}`);
-                            openLock = true;
-                        }
-                    });
-                });
+                
+                callback(null, body.data);
+                //var openLock = false;
+                ////console.log(body.data);
+                //_.each(body.data, function (d) {
+					////console.log(">>>>>>>>>>>>>>>",d);
+                  ////  _.each(f, function (d) {
+                        //if (d.distance < 0.6) {
+                            //console.log(`${d.className} detected with distance ${d.distance}`);
+                            //openLock = true;
+                        //}
+                    ////});
+                //});
 
-                if (openLock) {
-                    Nukilock.unlockNukilock({}, callback);
-                } else {
-                    callback(err, body);
-                }
+                //if (openLock) {
+					//console.time("open door");  
+                    //Nukilock.unlockNukilock({}, callback);
+                //} else {
+                    //callback(err, body);
+                //}
 
             });
         });
