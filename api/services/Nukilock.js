@@ -94,6 +94,7 @@ var model = {
                 Nukilock.getNukiLock(data, callback);
             }
         }, function (err, result) {
+		console.log(result);
             if (err || _.isEmpty(result.nukiLockBridgeUrl) || _.isEmpty(result.nukilock)) {
                 callback(err);
             } else {
@@ -117,8 +118,8 @@ var model = {
                         } catch (e) {
                             return callback(err, lockInfo);
                         }
-                       // console.log(typeof lockInfo);
-                       // console.log(lockInfo);
+console.log(typeof lockInfo);
+console.log(lockInfo);
                         callback(err, lockInfo);
                     }
                 });
