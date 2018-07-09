@@ -121,7 +121,7 @@ sails.on("lifted", function () {
                 }
                 
                 if (data.stateName == "locked") {
-                    if (props.RSSI > -75) {
+                    if (props.RSSI > -60) {
                         console.log(props.Name + ' is in range');
                         Nukilock.unlockNukilock({}, function (err) {
                             if (err) {

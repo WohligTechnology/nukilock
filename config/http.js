@@ -62,7 +62,7 @@ module.exports.http = {
             req.modelName = _.upperFirst(req.models[2]);
 
 
-            if (req.body && req.body._accessToken) {
+            if (true) {
                 Config.findOne({
                     name: "nukiLockBridgeUrl"
                 }, function (err, data) {
@@ -72,6 +72,7 @@ module.exports.http = {
                             value: false
                         });
                     } else if (data) {
+						console.log("http data", data);
                         req.Url = data.content;
                         next();
                     } else {

@@ -1,6 +1,6 @@
 apps:
   - script: "app.js"
-    name: "Node Framework - 80"
+    name: "RasberryPi Nuki - 1337"
     watch: false
-    args: "--prod"
+    args: ""
     exec_mode: "cluster"
